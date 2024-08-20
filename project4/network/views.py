@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -78,3 +78,16 @@ def posts(request):
             return JsonResponse({"error": "Content cannot be empty"}, status=400)
     else:
         return JsonResponse({"error": "POST request required"}, status=400)
+    
+def allposts(request):
+    posts = Post.objects.all().order_by('-timestap')
+    return render(request, "network/allposts.html", {
+        'posts': posts
+    })
+
+def profile(request, username):
+    user = get_object_or_404(User, username=username)
+    posts = Post.objects.filter(user=user).order_by('-timestap')
+    return render(request, 'network/profile.html', {
+        'posts': posts
+    })

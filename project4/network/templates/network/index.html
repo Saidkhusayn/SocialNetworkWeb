@@ -1,20 +1,22 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-<main>
-    <h2>All Posts</h2>
-    {% if user.is_authenticated %}
-    <div id='new-post'>
-        <form id='post-form' method='POST'>
-        {% csrf_token %}
-            <div class="form-group">
-                <label for="post-content">New Post</label>
-                <textarea maxlength="300" class="form-control" id="post-content" aria-describedby="emailHelp" placeholder="Type..."></textarea>
-                <small id="emailHelp" class="form-text text-muted">No more than 300 characters</small>
-              </div>
-              <button id='post-sbmt' type="submit" class="btn btn-primary">Submit</button>
-            </form>
-    </div>  
-</main>
+
+    <div class="container-xl mt-4 ">
+        <h2>All Posts</h2>
+        {% if user.is_authenticated %}
+        <div id='new-post'>
+            <form id='post-form' method='POST'>
+            {% csrf_token %}
+                <div class="form-group">
+                    <label for="post-content">New Post</label>
+                    <textarea maxlength="300" class="form-control" id="post-content" aria-describedby="emailHelp" placeholder="Type..."></textarea>
+                    <small id="emailHelp" class="form-text text-muted">No more than 300 characters</small>
+                </div>
+                <button id='post-sbmt' type="submit" class="btn btn-primary">Post</button>
+                </form>
+        </div>  
+    </div>
+
 {% endif %}
 {% endblock %}

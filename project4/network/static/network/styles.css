@@ -1,8 +1,35 @@
 main {
-    margin: 15px;
+    margin: 25px;
 }
 
 #new-post{
-    border: 1px gray solid;
+    border: 1px lightgray solid;
     padding: 15px;
+    margin-bottom: 20px;
 }
+
+#new-post .i-btn{
+    border: none;
+    background-color: transparent;
+}
+
+#new-post .i-btn:focus{
+    outline: none;
+}
+
+/* Profile Header Styling */
+.profile-header {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-header h2 {
+    margin-bottom: 10px;
+}
+
+.profile-header p {
+    margin-bottom: 5px;
+}
+

@@ -1,0 +1,37 @@
+{% extends 'network/layout.html' %}
+{% block body%}
+<div class="container mt-4">
+    <!-- Profile Header -->
+    <div class="profile-header bg-light p-4 rounded shadow-sm">
+        <h2 class="text-primary">{{ user.username }}</h2>
+        <p class="text-muted">Joined: {{ user.date_joined|date:"F Y" }}</p>
+        <div class="d-flex justify-content-start">
+            <p class='mr-5'><strong>Followers:</strong> 0</p> </br>
+            <p class='mr-5'><strong>Following:</strong> 0</p>
+            <p class='mr-5'><strong>Posts:</strong> {{posts.count}}</p>
+        </div>
+    </div>
+
+    <!-- Posts Section -->
+    <div class="posts-section mt-4">
+        <h3 class="text-secondary">Posts</h3>
+        {% if posts %}
+            {% for post in posts %}
+                <div id="new-post" class="post bg-white p-3 mb-3 rounded shadow-sm">
+                    <h5 class="text-dark">{{ post.user }}</h5>
+                    <p class="mb-2">{{ post.content }}</p>
+                    <small class="text-muted">Created at {{ post.timestap|date:"F j, Y, g:i a" }}</small>
+                    <div class="mt-2">
+                        <button class="i-btn">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                        <span>0 Likes</span>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted">No posts available.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
