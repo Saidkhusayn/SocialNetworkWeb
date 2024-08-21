@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
@@ -138,3 +138,26 @@ def following(request):
         'posts': posts, 
         ' page_obj': page_obj,
     })
+
+@login_required
+def edit(request, post_id): 
+    try:
+        post = Post.objects.get(user=request.user, pk=post_id)
+    except Post.DoesNotExist:
+        return JsonResponse({'error': 'User not Found!'}, status='404')
+
+    if request.method == 'PUT':
+        if request.user == post.user:
+            data = json.loads(request.body)
+            if data.get('content'):
+                post.content = data['content']
+                post.save()
+            return HttpResponse(status=204)
+        else:
+            return HttpResponseForbidden("You are not allowed to edit this post.")
+    else:
+        return JsonResponse({
+            "error": "PUT request required."
+        }, status=400)
+
+                

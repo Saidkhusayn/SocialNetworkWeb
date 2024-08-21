@@ -31,15 +31,18 @@
         <h3 class="text-secondary">Posts</h3>
         {% if posts %}
             {% for post in posts %}
-                <div id="new-post" class="post bg-white p-3 mb-3 rounded shadow-sm">
+                <div id="new-post" class="post bg-white p-3 mb-3 rounded shadow-sm" data-post-id="{{ post.id }}">
                     <h5 class="text-dark">{{ post.user }}</h5>
-                    <p class="mb-2">{{ post.content }}</p>
+                    <p id='content' class="mb-2">{{ post.content }}</p>
                     <small class="text-muted">Created at {{ post.timestap|date:"F j, Y, g:i a" }}</small>
-                    <div class="mt-2">
-                        <button class="i-btn">
-                            <i class="fa-regular fa-heart"></i>
-                        </button>
-                        <span>0 Likes</span>
+                    <div class='d-flex justify-content-between'>
+                        <div class="mt-2">
+                            <button class="i-btn">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                            <span>0 Likes</span>
+                        </div>
+                        <button id='edit' class='i-btn'><i class="fa-solid fa-pen-to-square"></i></buton>
                     </div>
                 </div>
             {% endfor %}
