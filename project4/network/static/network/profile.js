@@ -32,56 +32,54 @@ document.addEventListener('DOMContentLoaded', () => {
             
     })}
     
-    if(editBtn){
+    if (editBtn) {
         document.querySelectorAll('.i-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                
+            button.addEventListener('click', function editPost() {
                 const postDiv = this.closest('.post');
                 const post_id = postDiv.dataset.postId;
-                const postContentP = postDiv.querySelector('#content');
-                const textarea = document.createElement('textarea');
-                textarea.value = postContentP.textContent;
                 
+                let postContentP = postDiv.querySelector('#content');
+                const existingTextarea = postDiv.querySelector('textarea');
+
+                // If the textarea already exists, focus on it (in case user wants to re-edit before saving)
+                if (existingTextarea) {
+                    existingTextarea.focus();
+                    return;
+                }
+
+                const textarea = document.createElement('textarea');
+                textarea.value = postContentP ? postContentP.textContent : existingTextarea.value;
+                const afterChild = postDiv.querySelector('small.text-muted');
+
                 // Set any additional properties or styles on the textarea
                 textarea.style.width = '100%';
                 textarea.style.height = '100px';
 
-                postContentP.replaceWith(textarea);
+                if (postContentP) {
+                    postContentP.remove();
+                } else if (existingTextarea) {
+                    existingTextarea.remove();
+                }
+
+                postDiv.insertBefore(textarea, afterChild);
                 this.textContent = 'Save';
 
-                this.addEventListener('click', function saveEdit() {
+                const saveEdit = () => {
                     const newP = document.createElement('p');
                     newP.className = 'mb-2';
+                    newP.id = 'content';
                     newP.textContent = textarea.value;
-                    textarea.replaceWith(newP);
-                    this.innerHTML = '<i class="fa-solid fa-pen-to-square">'
+                    textarea.remove();
+                    postDiv.insertBefore(newP, afterChild);
+                    this.innerHTML = '<i class="fa-solid fa-pen-to-square">';
 
-                // Modify database to include changes
-                fetch(`/profile/edit/${post_id}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }, 
-                    body: JSON.stringify ({
-                        content: textarea.value,
-                    })
-                })
-                .then(response => {
-                    if(!response.ok){
-                        throw new Error(`HTTP Error! Status: ${response.status}`)
-                    }
-                    else {
-                        return response.json()
-                    }
+                    this.removeEventListener('click', saveEdit);
+                    this.addEventListener('click', editPost);
+                };
 
-                })
-                .then(data => {
-                    console.log(data)
-                })
-
-                });
+                this.removeEventListener('click', editPost);
+                this.addEventListener('click', saveEdit);
             });
         });
-        
     }
 })
