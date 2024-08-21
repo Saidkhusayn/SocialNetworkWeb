@@ -87,7 +87,12 @@ def allposts(request):
 
 def profile(request, username):
     user = get_object_or_404(User, username=username)
+    follower_count = user.follower_count() 
+    following_count = user.following_count() 
     posts = Post.objects.filter(user=user).order_by('-timestap')
     return render(request, 'network/profile.html', {
-        'posts': posts
+        'posts': posts,
+        'postUser': user,
+        'follower_count': follower_count,
+        'following_count': following_count,
     })

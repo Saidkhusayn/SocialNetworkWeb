@@ -1,5 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
-    document.querySelector('#post-form').addEventListener('submit', create_post);
+   const dom = document.querySelector('#post-form');
+
+   if(dom!= null){
+    dom.addEventListener('submit', create_post);
+   }
 });
 
 function create_post(event) {

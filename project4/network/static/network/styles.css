@@ -25,11 +25,14 @@ main {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.profile-header h2 {
-    margin-bottom: 10px;
-}
-
 .profile-header p {
     margin-bottom: 5px;
 }
 
+.profile-header .btn{
+    border-radius: 20px;
+}
+
+.profile-header h2 {
+    margin-bottom: 5px; /* Remove bottom margin */
+}

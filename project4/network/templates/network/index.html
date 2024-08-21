@@ -1,7 +1,6 @@
 {% extends "network/layout.html" %}
-
+{% load static%}
 {% block body %}
-
     <div class="container-xl mt-4 ">
         <h2>All Posts</h2>
         {% if user.is_authenticated %}
@@ -17,6 +16,10 @@
                 </form>
         </div>  
     </div>
-
+    {% block scripts %}
+    <script src="{% static 'network/index.js' %}"></script>
+{% endblock %}
 {% endif %}
 {% endblock %}
+
+

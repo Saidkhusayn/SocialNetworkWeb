@@ -7,7 +7,7 @@
     {% if posts %}
         {% for post in posts %}
             <div id="new-post" class="post bg-white p-3 mb-3 rounded shadow-sm">
-                <h5 class="text-dark">{{ post.user }}</h5>
+                <h5 class="text-dark"><a href='{% url 'profile' username=post.user %}'>{{ post.user }}</a></h5>
                 <p class="mb-2">{{ post.content }}</p>
                 <small class="text-muted">Created at {{ post.timestap|date:"F j, Y, g:i a" }}</small>
                 <div class="mt-2">
