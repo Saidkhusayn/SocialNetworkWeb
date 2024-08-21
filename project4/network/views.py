@@ -1,10 +1,12 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.core.paginator import Paginator
 
 from .models import *
 
@@ -81,18 +83,58 @@ def posts(request):
     
 def allposts(request):
     posts = Post.objects.all().order_by('-timestap')
+    paginator = Paginator(posts, 10)  # Show 10 posts per page
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     return render(request, "network/allposts.html", {
-        'posts': posts
+        'posts': posts,
+        'page_obj': page_obj,
     })
 
+@csrf_exempt
 def profile(request, username):
     user = get_object_or_404(User, username=username)
+    if request.user.is_authenticated:   
+        if request.method == 'PUT':
+            if request.user != user:
+                if request.user.following.filter(pk=user.pk).exists():
+                    request.user.following.remove(user)
+                else:
+                    request.user.following.add(user)
+
+                return JsonResponse({
+                    'isFollowing': request.user.following.filter(pk=user.pk).exists(),
+                    'follower_count': user.follower_count(),
+                    'following_count': request.user.following_count()
+                })
+
     follower_count = user.follower_count() 
     following_count = user.following_count() 
     posts = Post.objects.filter(user=user).order_by('-timestap')
+    paginator = Paginator(posts, 10)  # Show 10 posts per page
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number) 
     return render(request, 'network/profile.html', {
         'posts': posts,
         'postUser': user,
         'follower_count': follower_count,
         'following_count': following_count,
+        'page_obj': page_obj,
+    })
+
+def following(request):
+    following_users = request.user.following.all()
+    posts = Post.objects.filter(user__in=following_users).order_by('-timestap')
+    paginator = Paginator(posts, 10)  # Show 10 posts per page
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # Pass the posts to the template
+    return render(request, 'network/following.html', {
+        'posts': posts, 
+        ' page_obj': page_obj,
     })

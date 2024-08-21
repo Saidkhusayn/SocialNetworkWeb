@@ -1,11 +1,11 @@
-{% extends "network/layout.html" %}
+{%extends 'network/layout.html' %}
 
 {% block body %}
 <div class="container mt-4 pb-5">
     <div class="posts-section mt-4">
         <h3 class="text-secondary">Posts</h3>
-        {% if page_obj.object_list %}
-            {% for post in page_obj.object_list %}
+        {% if posts %}
+            {% for post in posts %}
                 <div id="new-post" class="post bg-white p-3 mb-3 rounded shadow-sm">
                     <h5 class="text-dark"><a href='{% url 'profile' username=post.user %}'>{{ post.user }}</a></h5>
                     <p class="mb-2">{{ post.content }}</p>
@@ -19,11 +19,9 @@
                 </div>
             {% endfor %}
         {% else %}
-            <p class="text-muted">No posts available.</p>
+            <p class="text-muted">No posts are available.</p>
         {% endif %}
     </div>
-
-    <!-- Pagination Controls -->
     <div class="pagination mt-4">
         <div class="d-flex justify-content-between">
             {% if page_obj.has_previous %}
@@ -42,4 +40,5 @@
         </div>
     </div>
 </div>
+
 {% endblock %}

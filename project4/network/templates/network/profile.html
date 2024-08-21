@@ -1,18 +1,20 @@
 {% extends 'network/layout.html' %}
 {% load static%}
 {% block body%}
-<div class="container mt-4">
+<div class="container mt-4 pb-5">
     <div id='currentUser' data-user={{user.username}} ></div>
     <div id='user' data-user={{postUser.username}}></div>
     <!-- Profile Header -->
     <div class="profile-header bg-light p-4 rounded shadow-sm">
         <div class="d-flex justify-content-start mb-2">
             <h2 class="text-primary mr-3">{{ postUser.username }}</h2>
-            {% if user.username != postUser.username %}
-                {% if postUser in user.following.all %}
-                    <button  type="button" class="unfollow btn btn-outline-secondary btn-sm h-50 align-self-center">Unfollow</button>
-                {% else %}
-                    <button type="button" class="follow btn btn-outline-primary btn-sm h-50 align-self-center">Follow</button>
+            {%if user.is_authenticated %}
+                {% if user.username != postUser.username %}
+                    {% if postUser in user.following.all %}
+                        <button  type="button" class="unfollow btn btn-outline-secondary btn-sm h-50 align-self-center">Unfollow</button>
+                    {% else %}
+                        <button type="button" class="follow btn btn-outline-primary btn-sm h-50 align-self-center">Follow</button>
+                    {% endif %}
                 {% endif %}
             {% endif %}
         </div>        
@@ -44,6 +46,24 @@
         {% else %}
             <p class="text-muted">No posts available.</p>
         {% endif %}
+    </div>
+
+    <div class="pagination mt-4">
+        <div class="d-flex justify-content-between">
+            {% if page_obj.has_previous %}
+                <a class="btn btn-outline-primary mr-3" href="?page=1">First</a>
+                <a class="btn btn-outline-primary mr-3" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            {% else %}
+                <span class="btn btn-outline-secondary disabled mr-3">First</span>
+                <span class="btn btn-outline-secondary disabled mr-3">Previous</span>
+            {% endif %}
+
+            {% if page_obj.has_next %}
+                <a class="btn btn-outline-primary mr-3" href="?page={{ page_obj.next_page_number }}">Next</a>
+            {% else %}
+                <span class="btn btn-outline-secondary disabled mr-3">Next</span>
+            {% endif %}
+        </div>
     </div>
 </div>
 
