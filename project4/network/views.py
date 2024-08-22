@@ -136,28 +136,35 @@ def following(request):
     # Pass the posts to the template
     return render(request, 'network/following.html', {
         'posts': posts, 
-        ' page_obj': page_obj,
+        'page_obj': page_obj,
     })
 
 @login_required
-def edit(request, post_id): 
+@csrf_exempt
+def edit(request, post_id):
     try:
         post = Post.objects.get(user=request.user, pk=post_id)
     except Post.DoesNotExist:
-        return JsonResponse({'error': 'User not Found!'}, status='404')
+        return JsonResponse({'error': 'Post not found!'}, status=404)
 
     if request.method == 'PUT':
         if request.user == post.user:
-            data = json.loads(request.body)
-            if data.get('content'):
-                post.content = data['content']
-                post.save()
-            return HttpResponse(status=204)
+            try:
+                data = json.loads(request.body)
+                content = data.get('content')
+                if content:
+                    post.content = content
+                    print(f"Received content: {content}")
+                    post.save()
+                    return HttpResponse(status=204)
+                else:
+                    return JsonResponse({'error': 'Content is missing'}, status=400)
+            except json.JSONDecodeError:
+                return JsonResponse({'error': 'Invalid JSON'}, status=400)
         else:
             return HttpResponseForbidden("You are not allowed to edit this post.")
     else:
-        return JsonResponse({
-            "error": "PUT request required."
-        }, status=400)
+        return JsonResponse({'error': 'PUT request required.'}, status=400)
+
 
                 

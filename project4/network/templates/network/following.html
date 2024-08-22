@@ -4,8 +4,8 @@
 <div class="container mt-4 pb-5">
     <div class="posts-section mt-4">
         <h3 class="text-secondary">Posts</h3>
-        {% if posts %}
-            {% for post in posts %}
+        {% if page_obj.object_list %}
+            {% for post in page_obj.object_list %}
                 <div id="new-post" class="post bg-white p-3 mb-3 rounded shadow-sm">
                     <h5 class="text-dark"><a href='{% url 'profile' username=post.user %}'>{{ post.user }}</a></h5>
                     <p class="mb-2">{{ post.content }}</p>

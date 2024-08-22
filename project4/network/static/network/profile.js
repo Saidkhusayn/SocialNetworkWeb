@@ -73,12 +73,42 @@ document.addEventListener('DOMContentLoaded', () => {
                     postDiv.insertBefore(newP, afterChild);
                     this.innerHTML = '<i class="fa-solid fa-pen-to-square">';
 
+                    fetch(`/profile/edit/${post_id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }, 
+                        body: JSON.stringify ({
+                            content: textarea.value,
+                        })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP Error! Status: ${response.status}`);
+                        }
+                        if (response.status === 204) {
+                            console.log('Post updated successfully.');
+                            return;
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data) {
+                            console.log(data);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });       
+
                     this.removeEventListener('click', saveEdit);
                     this.addEventListener('click', editPost);
                 };
 
                 this.removeEventListener('click', editPost);
                 this.addEventListener('click', saveEdit);
+
+                         
             });
         });
     }
