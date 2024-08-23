@@ -6,15 +6,17 @@
         <h3 class="text-secondary">Posts</h3>
         {% if page_obj.object_list %}
             {% for post in page_obj.object_list %}
-                <div id="new-post" class="post bg-white p-3 mb-3 rounded shadow-sm">
+                <div id="new-post" class="post bg-white p-3 mb-3 rounded shadow-sm" data-post-id='{{post.id}}'>
                     <h5 class="text-dark"><a href='{% url 'profile' username=post.user %}'>{{ post.user }}</a></h5>
-                    <p class="mb-2">{{ post.content }}</p>
+                    <p id='content' class="mb-2">{{ post.content }}</p>
                     <small class="text-muted">Created at {{ post.timestap|date:"F j, Y, g:i a" }}</small>
-                    <div class="mt-2">
-                        <button id='like' class="i-btn">
-                            <i class="fa-regular fa-heart"></i>
-                        </button>
-                        <span>{{post.likes}} Likes</span>
+                    <div class='d-flex justify-content-between'>
+                        <div class="mt-2">
+                            <button id='like' class="i-btn">
+                                <i class="{% if user in post.likes.all %}fa-solid{% else %}fa-regular{% endif %} fa-heart"></i>
+                            </button>
+                            <span id='likes-count'>{{post.likes.count}} Likes</span>
+                        </div>
                     </div>
                 </div>
             {% endfor %}

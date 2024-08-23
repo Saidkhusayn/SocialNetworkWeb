@@ -20,7 +20,7 @@
             {% endif %}
         </div>        
         <p class="text-muted">Joined: {{ postUser.date_joined|date:"F Y" }}</p>
-        <div class="d-flex justify-content-start">
+        <div id='user-info' class="d-flex justify-content-start">
             <p class='mr-5'><strong>Followers:</strong> {{follower_count}}</p> 
             <p class='mr-5'><strong>Following:</strong> {{following_count}}</p>
             <p class='mr-5'><strong>Posts:</strong> {{posts.count}}</p>

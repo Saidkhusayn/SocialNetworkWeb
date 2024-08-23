@@ -1,11 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
     const followBtn = document.querySelector('.follow') || document.querySelector('.unfollow');
     const editBtn = document.querySelector('#edit');
-    const currentUser = document.getElementById('currentUser').dataset.user;
     const targetUser = document.getElementById('user').dataset.user;
 
     if (followBtn) {
-        followBtn.addEventListener('click', () => {
+        followBtn.addEventListener('click', event => {
+            const followers = document.querySelector('#user-info').children[0];
+
+            const textContent = followers.textContent.trim();
+            const firstWord = textContent.split(' ')[1];
+            let updatedFollowers = Number(firstWord);
+
             fetch(`/profile/${targetUser}`, {
                 method: 'PUT',
                 headers: {
@@ -23,10 +28,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     followBtn.classList.replace('btn-outline-primary', 'btn-outline-secondary');
                     followBtn.classList.replace('follow', 'unfollow');
                     followBtn.textContent = 'Unfollow';
+                    updatedFollowers = updatedFollowers + 1;
+                    followers.innerHTML = `<strong>Followers:</strong> ${updatedFollowers}`
                 } else {
                     followBtn.classList.replace('btn-outline-secondary', 'btn-outline-primary');
                     followBtn.classList.replace('unfollow', 'follow');
                     followBtn.textContent = 'Follow';
+                    updatedFollowers = updatedFollowers - 1;
+                    followers.innerHTML = `<strong>Followers:</strong> ${updatedFollowers}`
                 }
             })
             

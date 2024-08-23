@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
     const dom = document.querySelector('#post-form');
     const likeBtns = document.querySelectorAll('#like');
+   
+    
  
     if(dom!= null){
      dom.addEventListener('submit', create_post);
@@ -8,7 +10,8 @@ document.addEventListener("DOMContentLoaded", () => {
  
     if(likeBtns.length){
      likeBtns.forEach(button => {
-         button.addEventListener('click', like_unlike_post);
+         button.addEventListener('click', like_unlike_post)
+
      })
     }
  });
