@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })}
     
     if (editBtn) {
-        document.querySelectorAll('.i-btn').forEach(button => {
+        document.querySelectorAll('#edit').forEach(button => {
             button.addEventListener('click', function editPost() {
                 const postDiv = this.closest('.post');
                 const post_id = postDiv.dataset.postId;

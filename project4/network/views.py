@@ -165,6 +165,26 @@ def edit(request, post_id):
             return HttpResponseForbidden("You are not allowed to edit this post.")
     else:
         return JsonResponse({'error': 'PUT request required.'}, status=400)
-
-
+    
+@login_required
+@csrf_exempt
+def like(request, post_id):
+    if request.method == 'PUT':
+        if request.user.is_authenticated:
+           try:
+            post = Post.objects.get(id=post_id)
+            likes_count = post.total_likes()
+            if post.likes.filter(id=request.user.id).exists():
+                post.likes.remove(request.user)
+            else:
+                post.likes.add(request.user)
+            return JsonResponse({
+            'isLiked': post.likes.filter(pk=request.user.pk).exists(),
+            'likes_count': likes_count,
+        })
+           except json.JSONDecodeError:
+               return JsonResponse({'error': 'Invalid JSON'}, status=400)
+        else:
+            return redirect('login')
+    return JsonResponse({'error': 'PUT required!'}, status=403)
                 

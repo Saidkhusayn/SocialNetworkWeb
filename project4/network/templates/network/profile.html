@@ -4,6 +4,7 @@
 <div class="container mt-4 pb-5">
     <div id='currentUser' data-user={{user.username}} ></div>
     <div id='user' data-user={{postUser.username}}></div>
+    <div></div>
     <!-- Profile Header -->
     <div class="profile-header bg-light p-4 rounded shadow-sm">
         <div class="d-flex justify-content-start mb-2">
@@ -31,16 +32,16 @@
         <h3 class="text-secondary">Posts</h3>
         {% if page_obj.object_list %}
             {% for post in page_obj.object_list %}
-                <div id="new-post" class="post bg-white p-3 mb-3 rounded shadow-sm" data-post-id="{{ post.pk }}">
+                <div id="new-post" class="post bg-white p-3 mb-3 rounded shadow-sm" data-post-id='{{post.id}}'>
                     <h5 class="text-dark">{{ post.user }}</h5>
                     <p id='content' class="mb-2">{{ post.content }}</p>
                     <small class="text-muted">Created at {{ post.timestap|date:"F j, Y, g:i a" }}</small>
                     <div class='d-flex justify-content-between'>
                         <div class="mt-2">
-                            <button class="i-btn">
-                                <i class="fa-regular fa-heart"></i>
+                            <button id='like' class="i-btn">
+                                <i class="{% if user in post.likes.all %}fa-solid{% else %}fa-regular{% endif %} fa-heart"></i>
                             </button>
-                            <span>0 Likes</span>
+                            <span id='likes-count'>{{post.likes.count}} Likes</span>
                         </div>
                         {% if user.is_authenticated%}
                             {% if user == post.user %}
