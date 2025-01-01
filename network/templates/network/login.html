@@ -1,7 +1,7 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-
+<div class='container'>
     <h2>Login</h2>
 
     {% if message %}
@@ -21,4 +21,5 @@
 
     Don't have an account? <a href="{% url 'register' %}">Register here.</a>
 
+</div>
 {% endblock %}
